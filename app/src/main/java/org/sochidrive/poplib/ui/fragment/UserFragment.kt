@@ -11,18 +11,19 @@ import org.sochidrive.poplib.R
 import org.sochidrive.poplib.mvp.presenter.UserPresenter
 import org.sochidrive.poplib.mvp.view.UserView
 import org.sochidrive.poplib.App
+import org.sochidrive.poplib.mvp.model.entity.GithubUser
 import org.sochidrive.poplib.ui.BackButtonListener
 
 class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
     companion object {
         private const val USER = "user"
-        fun newInstance(name: String) = UserFragment().apply {
-            arguments = Bundle().apply { putString(USER,name) }
+        fun newInstance(user: GithubUser) = UserFragment().apply {
+            arguments = Bundle().apply { putParcelable(USER,user) }
         }
     }
 
     val presenter by moxyPresenter {
-        val user: String = arguments?.getString(USER) ?: ""
+        val user: GithubUser = arguments?.getParcelable<GithubUser>(USER) as GithubUser
         UserPresenter(App.instance.router, user)
     }
 
