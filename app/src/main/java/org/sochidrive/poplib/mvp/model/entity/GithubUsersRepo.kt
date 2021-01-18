@@ -1,5 +1,6 @@
 package org.sochidrive.poplib.mvp.model.entity
 
+import io.reactivex.rxjava3.core.Observable
 import org.sochidrive.poplib.mvp.model.entity.GithubUser
 
 class GithubUsersRepo {
@@ -13,7 +14,5 @@ class GithubUsersRepo {
         GithubUser("login6")
     )
 
-    fun getUsers(): List<GithubUser> {
-        return repositories
-    }
+    fun getUsers() = Observable.fromCallable { return@fromCallable repositories }
 }
