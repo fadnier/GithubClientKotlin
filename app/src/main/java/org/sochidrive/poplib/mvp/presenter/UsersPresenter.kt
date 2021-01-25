@@ -1,15 +1,16 @@
 package org.sochidrive.poplib.mvp.presenter
 
+import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
 import org.sochidrive.poplib.mvp.model.entity.GithubUser
-import org.sochidrive.poplib.mvp.model.entity.GithubUsersRepo
+import org.sochidrive.poplib.mvp.model.repo.IGithubUsersRepo
 import org.sochidrive.poplib.mvp.presenter.list.IUsersListPresenter
 import org.sochidrive.poplib.mvp.view.UsersView
 import org.sochidrive.poplib.mvp.view.list.UserItemView
 import org.sochidrive.poplib.navigation.Screens
 import ru.terrakok.cicerone.Router
 
-class UsersPresenter(val router: Router, val usersRepo: GithubUsersRepo) : MvpPresenter<UsersView>() {
+class UsersPresenter(val mainThreadScheduler: Scheduler, val usersRepo: IGithubUsersRepo, val router: Router) : MvpPresenter<UsersView>() {
 
     class UsersListPresenter : IUsersListPresenter {
         override var itemClickListener: ((UserItemView) -> Unit)? = null
@@ -18,7 +19,9 @@ class UsersPresenter(val router: Router, val usersRepo: GithubUsersRepo) : MvpPr
 
         override fun bindView(view: UserItemView) {
             val user = users[view.pos]
-            view.setLogin(user.login)
+
+            user.login?.let { view.setLogin(it) }
+            user.avatarUrl?.let {view.loadAvatar(it)}
         }
 
         override fun getCount() = users.size
@@ -37,13 +40,15 @@ class UsersPresenter(val router: Router, val usersRepo: GithubUsersRepo) : MvpPr
     }
 
     fun loadData() {
-        val users = usersRepo.getUsers().subscribe({
-            usersListPresenter.users.clear()
-            usersListPresenter.users.addAll(it)
-            viewState.updateUsersList()
-        },{
-            it.printStackTrace()
-        })
+        usersRepo.getUsers()
+            .observeOn(mainThreadScheduler)
+            .subscribe({ users ->
+                usersListPresenter.users.clear()
+                usersListPresenter.users.addAll(users)
+                viewState.updateUsersList()
+            }, {
+                println("Error: ${it.message}")
+            })
     }
 
     fun backClick(): Boolean {
