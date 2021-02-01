@@ -12,6 +12,7 @@ class RepositoryPresenter(val router: Router, val githubRepository: GithubReposi
         viewState.setId(githubRepository.id ?: "")
         viewState.setTitle(githubRepository.name ?: "")
         viewState.setForksCount(githubRepository.forksCount.toString() ?: "")
+        viewState.setFullName(githubRepository.fullName?: "")
     }
 
     fun backPressed(): Boolean {

@@ -12,6 +12,7 @@ import moxy.ktx.moxyPresenter
 import org.sochidrive.poplib.ApiHolder
 import org.sochidrive.poplib.App
 import org.sochidrive.poplib.R
+import org.sochidrive.poplib.mvp.model.cache.room.RoomGithubUsersCache
 import org.sochidrive.poplib.mvp.model.entity.room.Database
 import org.sochidrive.poplib.mvp.model.repo.retrofit.RetrofitGithubUsersRepo
 import org.sochidrive.poplib.mvp.presenter.UsersPresenter
@@ -30,7 +31,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     val presenter by moxyPresenter {
         UsersPresenter(
             AndroidSchedulers.mainThread(),
-            RetrofitGithubUsersRepo(ApiHolder.api, AndroidNetworkStatus(App.instance), Database.getInstance()),
+            RetrofitGithubUsersRepo(ApiHolder.api, AndroidNetworkStatus(App.instance), RoomGithubUsersCache(Database.getInstance())),
             App.instance.router)
     }
 

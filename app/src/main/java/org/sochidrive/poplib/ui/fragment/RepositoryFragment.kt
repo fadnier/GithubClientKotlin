@@ -50,5 +50,9 @@ class RepositoryFragment : MvpAppCompatFragment(), RepositoryView, BackButtonLis
         tv_forksCount.text = text
     }
 
+    override fun setFullName(text: String) {
+        tv_fullname.text = text
+    }
+
     override fun backPressed() = presenter.backPressed()
 }

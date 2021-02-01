@@ -7,7 +7,7 @@ import org.sochidrive.poplib.mvp.model.entity.room.dao.RepositoryDao
 import org.sochidrive.poplib.mvp.model.entity.room.dao.UserDao
 import java.lang.RuntimeException
 
-@androidx.room.Database(entities = [RoomGithubUser::class, RoomGithubRepository::class], version = 1)
+@androidx.room.Database(entities = [RoomGithubUser::class, RoomGithubRepository::class], version = 2)
 abstract class Database : RoomDatabase() {
     abstract val userDao: UserDao
     abstract val repositoryDao: RepositoryDao
@@ -20,7 +20,10 @@ abstract class Database : RoomDatabase() {
 
         fun create(context: Context) {
             if (instance == null) {
-                instance = Room.databaseBuilder(context!!, Database::class.java, DB_NAME).build()
+                instance = Room.databaseBuilder(context!!, Database::class.java, DB_NAME)
+                        //.fallbackToDestructiveMigration() - для разрушения бд и создания новой
+                        .addMigrations(MIGRATION_1_2) //добавление миграций
+                        .build()
             }
         }
     }

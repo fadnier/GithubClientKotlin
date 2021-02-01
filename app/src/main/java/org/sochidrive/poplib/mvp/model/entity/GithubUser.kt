@@ -11,6 +11,4 @@ data class GithubUser(
     @Expose val login : String,
     @Expose val avatarUrl: String? = null,
     @Expose val reposUrl: String? = null
-) : Parcelable {
-    fun getLogin() = Observable.fromCallable { return@fromCallable login }
-}
+) : Parcelable
