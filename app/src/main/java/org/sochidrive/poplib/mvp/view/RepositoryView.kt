@@ -10,4 +10,5 @@ interface RepositoryView: MvpView {
     fun setId(text: String)
     fun setTitle(text: String)
     fun setForksCount(text: String)
+    fun setFullName(text: String)
 }
