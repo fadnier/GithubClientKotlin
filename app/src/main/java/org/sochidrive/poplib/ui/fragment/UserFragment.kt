@@ -15,9 +15,11 @@ import org.sochidrive.poplib.mvp.presenter.UserPresenter
 import org.sochidrive.poplib.mvp.view.UserView
 import org.sochidrive.poplib.App
 import org.sochidrive.poplib.mvp.model.entity.GithubUser
+import org.sochidrive.poplib.mvp.model.entity.room.Database
 import org.sochidrive.poplib.mvp.model.repo.retrofit.RetrofitGithubRepositoriesRepo
 import org.sochidrive.poplib.ui.BackButtonListener
 import org.sochidrive.poplib.ui.adapter.ReposotoriesRVAdapter
+import org.sochidrive.poplib.ui.network.AndroidNetworkStatus
 
 class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
     companion object {
@@ -29,7 +31,7 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     val presenter by moxyPresenter {
         val user: GithubUser = arguments?.getParcelable<GithubUser>(USER_ARG) as GithubUser
-        UserPresenter(AndroidSchedulers.mainThread(), RetrofitGithubRepositoriesRepo(ApiHolder.api) , App.instance.router,user)
+        UserPresenter(AndroidSchedulers.mainThread(), RetrofitGithubRepositoriesRepo(ApiHolder.api, AndroidNetworkStatus(App.instance), Database.getInstance()) , App.instance.router,user)
     }
 
     var adapter: ReposotoriesRVAdapter? = null

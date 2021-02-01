@@ -12,12 +12,14 @@ import moxy.ktx.moxyPresenter
 import org.sochidrive.poplib.ApiHolder
 import org.sochidrive.poplib.App
 import org.sochidrive.poplib.R
+import org.sochidrive.poplib.mvp.model.entity.room.Database
 import org.sochidrive.poplib.mvp.model.repo.retrofit.RetrofitGithubUsersRepo
 import org.sochidrive.poplib.mvp.presenter.UsersPresenter
 import org.sochidrive.poplib.mvp.view.UsersView
 import org.sochidrive.poplib.ui.BackButtonListener
 import org.sochidrive.poplib.ui.adapter.UsersRvAdapter
 import org.sochidrive.poplib.ui.image.GlideImageLoader
+import org.sochidrive.poplib.ui.network.AndroidNetworkStatus
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
@@ -28,7 +30,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     val presenter by moxyPresenter {
         UsersPresenter(
             AndroidSchedulers.mainThread(),
-            RetrofitGithubUsersRepo(ApiHolder.api),
+            RetrofitGithubUsersRepo(ApiHolder.api, AndroidNetworkStatus(App.instance), Database.getInstance()),
             App.instance.router)
     }
 
