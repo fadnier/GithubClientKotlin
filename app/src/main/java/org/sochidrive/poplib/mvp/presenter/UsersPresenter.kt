@@ -9,8 +9,13 @@ import org.sochidrive.poplib.mvp.view.UsersView
 import org.sochidrive.poplib.mvp.view.list.UserItemView
 import org.sochidrive.poplib.navigation.Screens
 import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
-class UsersPresenter(val mainThreadScheduler: Scheduler, val usersRepo: IGithubUsersRepo, val router: Router) : MvpPresenter<UsersView>() {
+class UsersPresenter(val mainThreadScheduler: Scheduler) : MvpPresenter<UsersView>() {
+    @Inject
+    lateinit var usersRepo: IGithubUsersRepo
+    @Inject
+    lateinit var router: Router
 
     class UsersListPresenter : IUsersListPresenter {
         override var itemClickListener: ((UserItemView) -> Unit)? = null

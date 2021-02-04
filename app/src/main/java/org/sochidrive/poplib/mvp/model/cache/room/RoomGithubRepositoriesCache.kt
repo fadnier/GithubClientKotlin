@@ -9,7 +9,8 @@ import org.sochidrive.poplib.mvp.model.entity.GithubUser
 import org.sochidrive.poplib.mvp.model.entity.room.Database
 import org.sochidrive.poplib.mvp.model.entity.room.RoomGithubRepository
 
-class RoomGithubRepositoriesCache(val db: Database) : IGithubRepositoriesCache {
+class RoomGithubRepositoriesCache(var db: Database) : IGithubRepositoriesCache {
+
     override fun getUserRepos(user: GithubUser) = Single.fromCallable {
         val roomUser = db.userDao.findByLogin(user.login) ?: throw RuntimeException("No such user in cache")
         return@fromCallable db.repositoryDao.findForUser(roomUser.id)

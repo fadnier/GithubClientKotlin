@@ -16,6 +16,7 @@ import org.sochidrive.poplib.ui.BackButtonListener
 import org.sochidrive.poplib.ui.adapter.ReposotoriesRVAdapter
 
 class RepositoryFragment : MvpAppCompatFragment(), RepositoryView, BackButtonListener {
+
     companion object {
         private const val REPOSITORY_ARG = "repository"
 
@@ -30,7 +31,7 @@ class RepositoryFragment : MvpAppCompatFragment(), RepositoryView, BackButtonLis
 
     val presenter: RepositoryPresenter by moxyPresenter {
         val repository = arguments?.getParcelable<GithubRepository>(REPOSITORY_ARG) as GithubRepository
-        RepositoryPresenter(App.instance.router, repository)
+        RepositoryPresenter(repository).apply { App.instance.appComponent.inject(this) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
