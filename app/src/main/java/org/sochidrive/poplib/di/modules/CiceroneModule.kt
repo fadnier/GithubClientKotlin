@@ -9,7 +9,7 @@ import javax.inject.Singleton
 
 @Module
 class CiceroneModule {
-    var cicerone: Cicerone<Router> = Cicerone.create()
+    private var cicerone: Cicerone<Router> = Cicerone.create()
 
     @Provides
     fun cicerone(): Cicerone<Router> = cicerone

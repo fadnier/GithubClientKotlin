@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_user.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -30,9 +29,7 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     val presenter: UserPresenter by moxyPresenter {
         val user: GithubUser = arguments?.getParcelable<GithubUser>(USER_ARG) as GithubUser
-        UserPresenter(
-            AndroidSchedulers.mainThread(),
-            user).apply { App.instance.appComponent.inject(this) }
+        UserPresenter(user).apply { App.instance.appComponent.inject(this) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =

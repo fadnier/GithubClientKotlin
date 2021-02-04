@@ -13,12 +13,15 @@ import org.sochidrive.poplib.navigation.Screens
 import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
-class UserPresenter (val mainThreadScheduler: Scheduler, val user: GithubUser) : MvpPresenter<UserView>() {
+class UserPresenter (val user: GithubUser) : MvpPresenter<UserView>() {
 
     @Inject
     lateinit var router: Router
+    @Inject
+    lateinit var repositoriesRepo: IGithubRepositoriesRepo
+    @Inject
+    lateinit var mainThreadScheduler: Scheduler
 
-    @Inject lateinit var repositoriesRepo: IGithubRepositoriesRepo
 
     class RepositoriesListPresenter : IRepositoryListPresenter {
         val repositories = mutableListOf<GithubRepository>()
