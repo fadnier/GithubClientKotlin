@@ -7,20 +7,28 @@ import org.sochidrive.poplib.App
 import org.sochidrive.poplib.R
 import org.sochidrive.poplib.mvp.presenter.MainPresenter
 import org.sochidrive.poplib.mvp.view.MainView
+import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
+import javax.inject.Inject
 
 class MainActivity : MvpAppCompatActivity(), MainView {
 
-    val navigatorHolder = App.instance.navigatorHolder
+    @Inject
+    lateinit var navigatorHolder: NavigatorHolder
+
     val navigator = SupportAppNavigator(this, supportFragmentManager, R.id.container)
 
     val presenter by moxyPresenter {
-        MainPresenter(App.instance.router)
+        MainPresenter().apply {
+            App.instance.appComponent.inject(this)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        App.instance.appComponent.inject(this)
     }
 
     override fun onResumeFragments() {

@@ -4,8 +4,12 @@ import moxy.MvpPresenter
 import org.sochidrive.poplib.mvp.model.entity.GithubRepository
 import org.sochidrive.poplib.mvp.view.RepositoryView
 import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
-class RepositoryPresenter(val router: Router, val githubRepository: GithubRepository) : MvpPresenter<RepositoryView>() {
+class RepositoryPresenter(val githubRepository: GithubRepository) : MvpPresenter<RepositoryView>() {
+
+    @Inject lateinit var router: Router
+
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()

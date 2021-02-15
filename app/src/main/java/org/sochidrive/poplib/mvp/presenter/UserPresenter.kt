@@ -2,6 +2,7 @@ package org.sochidrive.poplib.mvp.presenter
 
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
+import org.sochidrive.poplib.App
 import org.sochidrive.poplib.mvp.model.entity.GithubRepository
 import org.sochidrive.poplib.mvp.model.entity.GithubUser
 import org.sochidrive.poplib.mvp.model.repo.IGithubRepositoriesRepo
@@ -10,8 +11,17 @@ import org.sochidrive.poplib.mvp.view.UserView
 import org.sochidrive.poplib.mvp.view.list.RepositoryItemView
 import org.sochidrive.poplib.navigation.Screens
 import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
-class UserPresenter (val mainThreadScheduler: Scheduler, val repositoriesRepo: IGithubRepositoriesRepo, val router: Router, val user: GithubUser) : MvpPresenter<UserView>() {
+class UserPresenter (val user: GithubUser) : MvpPresenter<UserView>() {
+
+    @Inject
+    lateinit var router: Router
+    @Inject
+    lateinit var repositoriesRepo: IGithubRepositoriesRepo
+    @Inject
+    lateinit var mainThreadScheduler: Scheduler
+
 
     class RepositoriesListPresenter : IRepositoryListPresenter {
         val repositories = mutableListOf<GithubRepository>()
@@ -30,7 +40,7 @@ class UserPresenter (val mainThreadScheduler: Scheduler, val repositoriesRepo: I
         super.onFirstViewAttach()
         viewState.init()
         loadData()
-
+        App.instance.appComponent.inject(this)
         repositoriesListPresenter.itemClickListener = { itemView ->
             val repository = repositoriesListPresenter.repositories[itemView.pos]
             router.navigateTo(Screens.RepositoryScreen(repository))

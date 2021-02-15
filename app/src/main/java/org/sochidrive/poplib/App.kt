@@ -1,29 +1,29 @@
 package org.sochidrive.poplib
 
 import android.app.Application
+import dagger.internal.DaggerCollections
+import org.sochidrive.poplib.di.AppComponent
+import org.sochidrive.poplib.di.DaggerAppComponent
+import org.sochidrive.poplib.di.modules.AppModule
 import org.sochidrive.poplib.mvp.model.entity.room.Database
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 
 class App : Application() {
 
+    lateinit var appComponent: AppComponent
+        private set
+
     companion object {
         lateinit var instance: App
-    }
-
-    private val cicerone: Cicerone<Router> by lazy {
-        Cicerone.create()
     }
 
     override fun onCreate() {
         super.onCreate()
         instance = this
-        Database.create(this)
+
+        appComponent = DaggerAppComponent.builder()
+            .appModule(AppModule(this))
+            .build()
     }
-
-    val navigatorHolder
-        get() = cicerone.navigatorHolder
-
-    val router
-        get() = cicerone.router
 }
